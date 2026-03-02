@@ -1,18 +1,25 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 
 // Text / icon color — always teal, never changes with scroll
 const TEAL = "rgb(84, 106, 113)";
 
 const navLinks = ["Beethr P1", "Technology", "Team", "Learn"];
 
+// Dead-zone in px before toggling visibility — prevents twitchy behavior
+const SCROLL_THRESHOLD = 30;
+
 export function Navbar() {
   const [isOpen, setIsOpen] = useState(false);
-  // visible = true  → navbar slides into view (translateY 0, opacity 1)
-  // visible = false → navbar slides out   (translateY -8px, opacity 0)
   const [visible, setVisible] = useState(true);
+  const [scrolled, setScrolled] = useState(false);
+
+  // Refs for scroll tracking — avoids re-renders on every pixel
   const lastScrollYRef = useRef(0);
+  const scrollAccumulatorRef = useRef(0);
+  const directionRef = useRef<"up" | "down" | null>(null);
+  const rafRef = useRef(0);
   const whooshRef = useRef<HTMLAudioElement | null>(null);
 
   useEffect(() => {
@@ -20,49 +27,81 @@ export function Navbar() {
     whooshRef.current.volume = 0.35;
   }, []);
 
-  // ── Scroll direction: hide on down, show on up ─────────────────────
+  // ── Scroll direction detection — throttled via rAF ──────────────
   useEffect(() => {
     const handleScroll = () => {
-      const currentY = window.scrollY;
-      const prev = lastScrollYRef.current;
+      cancelAnimationFrame(rafRef.current);
+      rafRef.current = requestAnimationFrame(() => {
+        const currentY = window.scrollY;
+        const prev = lastScrollYRef.current;
+        const delta = currentY - prev;
 
-      if (currentY <= 10) {
-        // Always show at very top
-        setVisible(true);
-      } else if (currentY > prev + 4) {
-        // Scrolling down → hide and close mobile menu
-        setVisible(false);
-        setIsOpen(false);
-      } else if (currentY < prev - 4) {
-        // Scrolling up → show
-        setVisible(true);
-      }
+        // Track if we've scrolled past the top
+        setScrolled(currentY > 10);
 
-      lastScrollYRef.current = currentY;
+        if (currentY <= 10) {
+          // Always show at very top
+          setVisible(true);
+          scrollAccumulatorRef.current = 0;
+          directionRef.current = null;
+          lastScrollYRef.current = currentY;
+          return;
+        }
+
+        // Determine direction
+        const newDir = delta > 0 ? "down" : delta < 0 ? "up" : directionRef.current;
+
+        // Reset accumulator on direction change
+        if (newDir !== directionRef.current) {
+          scrollAccumulatorRef.current = 0;
+          directionRef.current = newDir;
+        }
+
+        scrollAccumulatorRef.current += Math.abs(delta);
+
+        // Only toggle after accumulating enough movement in one direction
+        if (scrollAccumulatorRef.current > SCROLL_THRESHOLD) {
+          if (newDir === "down") {
+            setVisible(false);
+            setIsOpen(false);
+          } else if (newDir === "up") {
+            setVisible(true);
+          }
+        }
+
+        lastScrollYRef.current = currentY;
+      });
     };
 
     window.addEventListener("scroll", handleScroll, { passive: true });
-    return () => window.removeEventListener("scroll", handleScroll);
+    return () => {
+      window.removeEventListener("scroll", handleScroll);
+      cancelAnimationFrame(rafRef.current);
+    };
   }, []);
 
-  const toggle = () => {
+  const toggle = useCallback(() => {
     if (whooshRef.current) {
       whooshRef.current.currentTime = 0;
       void whooshRef.current.play().catch(() => null);
     }
     setIsOpen((v) => !v);
-  };
+  }, []);
 
-  // Visibility animation — translates up slightly when hidden, no size change
-  const visibilityStyle: React.CSSProperties = {
-    opacity: visible ? 1 : 0,
-    transform: visible ? "translateY(0)" : "translateY(-8px)",
-    pointerEvents: visible ? "auto" : "none",
-    transition: "opacity 300ms ease, transform 300ms ease",
+
+  // ── Navbar slide animation (translateY -100% to hide) ───────────
+  const navTransform: React.CSSProperties = {
+    transform: visible ? "translateY(0)" : "translateY(-100%)",
+    transition: "transform 280ms ease",
     willChange: "transform",
   };
 
-  // Navbar background: always fully transparent — no blur, no tinted glass
+  // Subtle shadow when scrolled and visible
+  const shadow = visible && scrolled
+    ? "0 2px 12px rgba(0,0,0,0.06)"
+    : "none";
+
+  // Navbar background: always fully transparent — no blur
   const navBg: React.CSSProperties = {
     backgroundColor: "rgba(0, 0, 0, 0)",
     backdropFilter: "none",
@@ -76,7 +115,7 @@ export function Navbar() {
           ════════════════════════════════════════════════════════════ */}
       <nav
         className="fixed left-0 right-0 top-0 z-[9] hidden md:block"
-        style={visibilityStyle}
+        style={{ ...navTransform, boxShadow: shadow }}
       >
         <div
           className="flex h-16 items-center justify-between"
@@ -87,7 +126,6 @@ export function Navbar() {
             className="flex items-center gap-8"
             style={{ borderRadius: "1000px" }}
           >
-            {/* Breethr wordmark SVG */}
             <a
               href="#"
               className="flex items-center gap-1 font-sans text-[13px] font-normal transition-opacity hover:opacity-70"
@@ -105,7 +143,6 @@ export function Navbar() {
               Breethr
             </a>
 
-            {/* Nav links */}
             <div className="flex items-center gap-6">
               {navLinks.map((item) => (
                 <a
@@ -127,7 +164,7 @@ export function Navbar() {
           >
             <a
               href="#"
-              className="flex items-center font-sans text-[13px] transition-opacity hover:opacity-70"
+              className="flex items-center font-sans text-[13px] transition-opacity hover:opacity-70 active:scale-[0.97] active:transition-transform active:duration-100"
               style={{
                 color: TEAL,
                 letterSpacing: "-0.13px",
@@ -138,10 +175,10 @@ export function Navbar() {
               Dataroom
             </a>
 
-            {/* Contact us — frosted white pill, always white bg */}
+            {/* Contact us — frosted white pill */}
             <a
               href="#"
-              className="relative overflow-hidden font-sans text-[13px] transition-opacity hover:opacity-80"
+              className="relative overflow-hidden font-sans text-[13px] transition-opacity hover:opacity-80 active:scale-[0.97] active:transition-transform active:duration-100"
               style={{ borderRadius: "1000px" }}
             >
               <span
@@ -174,11 +211,10 @@ export function Navbar() {
       <div
         className="fixed left-0 right-0 top-0 z-[9] overflow-hidden md:hidden"
         style={{
-          ...visibilityStyle,
+          ...navTransform,
           maxHeight: isOpen ? "400px" : "56px",
           transition:
-            "max-height 420ms cubic-bezier(0.2, 0, 0, 1), opacity 300ms ease, transform 300ms ease",
-          // Background: transparent when closed, white when open
+            "max-height 420ms cubic-bezier(0.2, 0, 0, 1), transform 280ms ease",
           backgroundColor: isOpen ? "rgb(255, 255, 255)" : "rgba(0, 0, 0, 0)",
           backdropFilter: "none",
           WebkitBackdropFilter: "none",
