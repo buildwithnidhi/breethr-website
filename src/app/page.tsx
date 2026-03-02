@@ -1,5 +1,6 @@
 import { Suspense } from "react";
 import { AudioManager } from "@/app/_components/audio-manager";
+import { ColorShiftSection } from "@/app/_components/color-shift-section";
 import { Navbar } from "@/app/_components/navbar";
 import { ScrollVideo } from "@/app/_components/scroll-video";
 
@@ -17,68 +18,8 @@ export default function Home() {
         <ScrollVideo />
       </Suspense>
 
-      {/* ── Text section: A New Era ── */}
-      <section
-        data-section="era"
-        className="flex min-h-screen flex-col items-center justify-center px-6 py-32"
-        style={{
-          background:
-            "linear-gradient(rgba(255,255,255,0.05) 0%, rgba(222,161,122,0.06) 8.84%, rgba(160,82,32,0.1) 100%), rgb(252, 246, 243)",
-        }}
-      >
-        {/* Label: Geist Pixel / mono substitute, 14px, uppercase, warm brown */}
-        <p
-          className="mb-[10px] font-mono text-[14px] uppercase"
-          style={{ color: "rgb(52, 44, 28)", letterSpacing: "-0.14px" }}
-        >
-          A new era of air intelligence
-        </p>
-        {/* Body copy — combined into one block matching Framer H2 */}
-        <h2
-          className="max-w-xl text-center font-sans font-normal"
-          style={{
-            fontSize: "28px",
-            lineHeight: "32.2px",
-            letterSpacing: "-0.84px",
-            color: "rgb(52, 44, 28)",
-          }}
-        >
-          Air technology hasn&apos;t changed in 50 years. We think about what
-          we eat. What we drink. But not what we breathe.
-        </h2>
-      </section>
-
-      {/* ── Gradient section: Decade ── */}
-      {/* framer-198evct: solid orange gradient — rgb(230,151,71) → rgb(146,66,23) */}
-      {/* framer-edvb9y: sticky overlay with label + H2 text (white) */}
-      <section
-        data-section="decade"
-        className="flex min-h-screen flex-col items-center justify-center px-6 py-32"
-        style={{
-          background:
-            "linear-gradient(180deg, rgb(230, 151, 71) 0%, rgb(146, 66, 23) 120%)",
-        }}
-      >
-        {/* Label: Geist Pixel / mono, 14px, uppercase, white, letter-spacing -0.14px */}
-        <p
-          className="mb-[10px] font-mono text-[14px] uppercase text-white"
-          style={{ letterSpacing: "-0.14px" }}
-        >
-          A new era of air intelligence
-        </p>
-        {/* Decade H2 — 28px, white, letter-spacing -0.84px, line-height 32.2px */}
-        <h2
-          className="max-w-xl text-center font-sans font-normal text-white"
-          style={{
-            fontSize: "28px",
-            lineHeight: "32.2px",
-            letterSpacing: "-0.84px",
-          }}
-        >
-          We spent a decade developing a system that makes this possible. The
-          air you breathe should be the air you choose.
-        </h2>
-      </section>
+      {/* ── Scroll-locked color-shift section (era → decade) ── */}
+      <ColorShiftSection />
 
       {/* ── Footer / CTA section ── */}
       {/* framer-1bi2ish gradient: rgb(160,80,31) → rgb(146,66,23) → rgb(234,168,82) */}
