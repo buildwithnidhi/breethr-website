@@ -3,6 +3,7 @@
 import { parseAsFloat, useQueryState } from "nuqs";
 import React, { useCallback, useEffect, useRef, useState } from "react";
 import { DustOverlay } from "./dust-overlay";
+import { SvgLoadingIndicator } from "./svg-loading-indicator";
 
 const TOTAL_FRAMES = 150;
 
@@ -398,27 +399,7 @@ export function ScrollVideo() {
         />
 
         {/* Loading indicator */}
-        {!loaded && (
-          <div
-            className="absolute inset-0 flex items-center justify-center"
-            style={{ backgroundColor: "rgb(252, 246, 243)" }}
-          >
-            <div className="text-center">
-              <div className="mb-2 h-1 w-48 overflow-hidden rounded-full bg-white/30">
-                <div
-                  className="h-full animate-pulse rounded-full bg-white/60"
-                  style={{ width: "60%" }}
-                />
-              </div>
-              <p
-                className="font-mono text-[12px] uppercase"
-                style={{ color: "rgb(77, 132, 149)", letterSpacing: "-0.12px" }}
-              >
-                LOADING
-              </p>
-            </div>
-          </div>
-        )}
+        {!loaded && <SvgLoadingIndicator />}
 
         {/* ── Text overlay 1: Hero tagline ─────────────────────────────
             Entry: CSS animation on mount (heroFadeIn keyframes)
