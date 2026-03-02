@@ -96,8 +96,8 @@ function getScrollLineStyle(
   if (progress <= lineEnterStart) {
     return {
       opacity: 0,
-      filter: "blur(8px)",
-      transform: "translateY(30px)",
+      filter: "blur(6px)",
+      transform: "translateY(12px)",
       willChange: "opacity, filter, transform",
     };
   }
@@ -108,8 +108,8 @@ function getScrollLineStyle(
     const e = easeOutCubic(t);
     return {
       opacity: e,
-      filter: `blur(${8 * (1 - e)}px)`,
-      transform: `translateY(${30 * (1 - e)}px)`,
+      filter: `blur(${6 * (1 - e)}px)`,
+      transform: `translateY(${12 * (1 - e)}px)`,
       willChange: "opacity, filter, transform",
     };
   }
@@ -351,13 +351,13 @@ export function ScrollVideo() {
   const heroLine1Style = getHeroLineExitStyle(progress, 0);
   const heroLine2Style = getHeroLineExitStyle(progress, 1);
 
-  // Text 2 lines — "You spend 90%..." — enters 0.28, full 0.34, exits 0.52–0.58
+  // Text 2 lines — "You spend 90%..." — enters 0.24, full 0.32, exits 0.52–0.58
   const text2Lines = [
     "You spend 90% of your life indoors. Your",
     "home. Your office. Your car. Your gym.",
     "Breathing 15,000 litres of air. Every day.",
   ].map((_line, i) =>
-    getScrollLineStyle(progress, 0.28, 0.34, 0.52, 0.58, i, 3),
+    getScrollLineStyle(progress, 0.24, 0.32, 0.52, 0.58, i, 3),
   );
 
   // Text 3 lines — "Air isn't neutral..." — enters 0.60, full 0.66, stays until end
