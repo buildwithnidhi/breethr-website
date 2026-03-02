@@ -17,8 +17,8 @@ function lerpRgb(from: RGB, to: RGB, t: number): string {
 }
 
 const CREAM: RGB = [252, 246, 243];
-const GRADIENT_TL: RGB = [228, 150, 70]; // #E49646
-const GRADIENT_BR: RGB = [160, 81, 32]; // #A05120
+const GRADIENT_TOP: RGB = [228, 150, 70]; // #E49646
+const GRADIENT_BOT: RGB = [160, 81, 32]; // #A05120
 const TEXT_DARK: RGB = [52, 44, 28];
 const TEXT_LIGHT: RGB = [255, 255, 255];
 
@@ -49,16 +49,16 @@ export function ColorShiftSection() {
     };
   }, []);
 
-  // Background: cream → diagonal orange gradient (progress 0.2 → 0.55)
+  // Background: cream → vertical orange gradient (progress 0.2 → 0.55)
   const colorT = easeOutCubic(
     Math.max(0, Math.min(1, (progress - 0.2) / 0.35)),
   );
-  const bgTL = lerpRgb(CREAM, GRADIENT_TL, colorT);
-  const bgBR = lerpRgb(CREAM, GRADIENT_BR, colorT);
+  const bgTop = lerpRgb(CREAM, GRADIENT_TOP, colorT);
+  const bgBot = lerpRgb(CREAM, GRADIENT_BOT, colorT);
   const background =
     colorT < 0.01
       ? `rgb(${CREAM.join(",")})`
-      : `linear-gradient(135deg, ${bgTL} 0%, ${bgBR} 100%)`;
+      : `linear-gradient(180deg, ${bgTop} 0%, ${bgBot} 100%)`;
 
   // Text + label color: dark brown → white
   const textColor = lerpRgb(TEXT_DARK, TEXT_LIGHT, colorT);
