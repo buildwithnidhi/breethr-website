@@ -6,7 +6,7 @@ import { NuqsAdapter } from "nuqs/adapters/next/app";
 import { TRPCReactProvider } from "@/trpc/react";
 
 export const metadata: Metadata = {
-  title: "Breethr — Optimizing every breath",
+  title: "Breethr — Optimizing Every Breath",
   description: "Optimizing every breath for better health and longer life",
   icons: [{ rel: "icon", url: "/favicon.ico" }],
 };
