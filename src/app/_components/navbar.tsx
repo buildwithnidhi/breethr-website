@@ -96,10 +96,7 @@ export function Navbar() {
     willChange: "transform",
   };
 
-  // Subtle shadow when scrolled and visible
-  const shadow = visible && scrolled
-    ? "0 2px 12px rgba(0,0,0,0.06)"
-    : "none";
+  const shadow = "none";
 
   // Navbar background: always fully transparent — no blur
   const navBg: React.CSSProperties = {
