@@ -52,8 +52,8 @@ const STATS_DATA = [
 ] as const;
 
 const COUNTER_DURATION = 2300; // ms
-const HERO_LINE1_DELAY = 2300; // ms after mount
-const HERO_LINE2_DELAY = 2600; // ms after mount (300ms stagger)
+const HERO_LINE1_DELAY = 0; // ms after mount
+const HERO_LINE2_DELAY = 300; // ms after mount (300ms stagger)
 const HERO_FADE_DURATION = 700; // ms
 
 function easeOutCubic(t: number): number {
