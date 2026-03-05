@@ -92,7 +92,7 @@ export default function Home() {
         className="relative flex min-h-screen flex-col items-center justify-center overflow-hidden"
         style={{
           background:
-            "linear-gradient(180deg, rgb(160, 80, 31) 0%, rgb(146, 66, 23) 45.84%, rgb(234, 168, 82) 100%)",
+            "linear-gradient(180deg, rgb(160, 81, 32) 0%, rgb(228, 150, 70) 100%)",
         }}
       >
         {/* Product image */}
