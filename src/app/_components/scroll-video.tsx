@@ -348,6 +348,15 @@ export function ScrollVideo() {
   const cornerRadius =
     progress < 0.85 ? 0 : Math.min(40, ((progress - 0.85) / 0.1) * 40);
 
+  // ── Background color blend: video → cream (next section) ──────
+  // Start blending at 75% scroll, fully cream by 95%
+  const blendStart = 0.75;
+  const blendEnd = 0.95;
+  const blendT = progress <= blendStart ? 0
+    : progress >= blendEnd ? 1
+    : easeOutCubic((progress - blendStart) / (blendEnd - blendStart));
+  const blendOpacity = blendT;
+
   // Text 1 hero lines — entry via CSS, exit via scroll
   const heroLine1Style = getHeroLineExitStyle(progress, 0);
   const heroLine2Style = getHeroLineExitStyle(progress, 1);
@@ -562,6 +571,17 @@ export function ScrollVideo() {
             SCROLL
           </p>
         </div>
+
+        {/* ── Color blend overlay: smooth transition to next section ── */}
+        <div
+          className="pointer-events-none absolute inset-0"
+          style={{
+            background:
+              "linear-gradient(rgba(255,255,255,0.05) 0%, rgba(222,161,122,0.06) 8.84%, rgba(160,82,32,0.1) 100%), rgb(252, 246, 243)",
+            opacity: blendOpacity,
+            willChange: "opacity",
+          }}
+        />
       </div>
     </div>
   );
