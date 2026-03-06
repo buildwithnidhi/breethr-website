@@ -98,9 +98,7 @@ export function ColorShiftSection() {
   const textColor = `rgba(${lerp(TEXT_DARK[0], TEXT_LIGHT[0], colorT)}, ${lerp(TEXT_DARK[1], TEXT_LIGHT[1], colorT)}, ${lerp(TEXT_DARK[2], TEXT_LIGHT[2], colorT)}, ${textAlpha})`;
 
   // ── Text 1 exits: progress 0.2→0.36 ──
-  const t1 = easeOutCubic(
-    Math.max(0, Math.min(1, (progress - 0.2) / 0.16)),
-  );
+  const t1 = easeOutCubic(Math.max(0, Math.min(1, (progress - 0.2) / 0.16)));
 
   // ── Text 2 enters: progress 0.32→0.48 ──
   const t2Enter = easeOutCubic(
@@ -125,9 +123,7 @@ export function ColorShiftSection() {
   );
 
   const isAnimating = progress > 0.05 && progress < 0.95;
-  const wc = isAnimating
-    ? ("opacity, filter, transform" as const)
-    : undefined;
+  const wc = isAnimating ? ("opacity, filter, transform" as const) : undefined;
 
   const activeIndex = getActiveIndex(progress);
   const [hoveredIndex, setHoveredIndex] = useState<number | null>(null);
@@ -153,12 +149,22 @@ export function ColorShiftSection() {
         style={{ background }}
       >
         {/* ── Phase 1 & 2: Text content ── */}
-        <div className="grid" style={{ gridTemplateColumns: "1fr", maxWidth: "480px", width: "100%", transform: `translateY(${-30 * progress}px)`, willChange: isAnimating ? "transform" : undefined }}>
+        <div
+          className="grid"
+          style={{
+            gridTemplateColumns: "1fr",
+            maxWidth: "480px",
+            width: "100%",
+            transform: `translateY(${-30 * progress}px)`,
+            willChange: isAnimating ? "transform" : undefined,
+          }}
+        >
           <h2
             className="text-center font-normal"
             style={{
               gridArea: "1/1",
-              fontFamily: '"GT Standard L Regular", "GT Standard L Regular Placeholder", sans-serif',
+              fontFamily:
+                '"GT Standard L Regular", "GT Standard L Regular Placeholder", sans-serif',
               fontSize: "24px",
               fontWeight: 400,
               lineHeight: "26.4px",
@@ -180,7 +186,8 @@ export function ColorShiftSection() {
             className="text-center font-normal"
             style={{
               gridArea: "1/1",
-              fontFamily: '"GT Standard L Regular", "GT Standard L Regular Placeholder", sans-serif',
+              fontFamily:
+                '"GT Standard L Regular", "GT Standard L Regular Placeholder", sans-serif',
               fontSize: "24px",
               fontWeight: 400,
               lineHeight: "26.4px",
@@ -215,7 +222,7 @@ export function ColorShiftSection() {
             className="pointer-events-none absolute inset-0 h-full w-full object-cover"
             style={{
               objectPosition: "center 35%",
-              filter: "saturate(1.08)",
+              filter: "saturate(1.08) brightness(0.65)",
               transform: `translateY(${20 * (1 - footerT)}px) scale(${1 + 0.03 * (1 - footerT)})`,
               willChange: isAnimating ? "transform" : undefined,
             }}
@@ -243,36 +250,38 @@ export function ColorShiftSection() {
           <h1
             className="max-w-[580px] text-center font-sans font-normal text-white"
             style={{
-              fontSize: "32px",
-              lineHeight: "36.8px",
-              letterSpacing: "-0.96px",
+              fontSize: "28px",
+              lineHeight: "32.2px",
+              letterSpacing: "-0.48px",
             }}
           >
             With Breethr, we have engineered
             <br />
             the future of air.
           </h1>
+          <style>{`
+            .cta-pill-footer .cta-bg { filter: blur(2px); transition: filter 300ms ease; }
+            .cta-pill-footer:hover .cta-bg { filter: blur(0px); }
+          `}</style>
           <a
-            href="#"
-            className="relative mt-6 overflow-hidden transition-opacity hover:opacity-90"
-            style={{ borderRadius: "1000px" }}
+            href="mailto:abhinav@breethrhq.com"
+            target="_blank"
+            rel="noopener"
+            className="cta-pill-footer relative mt-6 flex h-8 w-20 items-center justify-center font-sans"
+            style={{
+              borderRadius: "1000px",
+              fontSize: "13px",
+            }}
           >
             <span
-              className="absolute inset-0"
+              aria-hidden
+              className="cta-bg absolute inset-0"
               style={{
                 backgroundColor: "rgb(255, 255, 255)",
-                filter: "blur(2px)",
                 borderRadius: "1000px",
               }}
             />
-            <span
-              className="relative block font-sans text-[13px]"
-              style={{
-                color: "rgb(84, 106, 113)",
-                letterSpacing: "-0.13px",
-                padding: "10px 14px",
-              }}
-            >
+            <span className="relative pt-0.5 tracking-tighter text-black">
               Let&apos;s chat
             </span>
           </a>
@@ -350,19 +359,19 @@ export function ColorShiftSection() {
 
         {/* ── Copyright bar — fades in with phase 3 ── */}
         <div
-          className="absolute bottom-6 z-10 flex w-full items-center justify-between px-6"
+          className="absolute bottom-10 z-10 flex w-full items-center justify-between px-10"
           style={{
             opacity: copyrightT,
           }}
         >
           <p
-            className="font-mono uppercase text-white"
+            className="font-mono text-white uppercase"
             style={{ fontSize: "14px", letterSpacing: "-0.14px" }}
           >
-            &copy; 2026 Breethr
+            &copy; {new Date().getFullYear()} Breethr
           </p>
           <p
-            className="font-mono uppercase text-white"
+            className="font-mono text-white uppercase"
             style={{ fontSize: "14px", letterSpacing: "-0.14px" }}
           >
             Privacy Policy | Terms &amp; Conditions

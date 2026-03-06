@@ -70,7 +70,10 @@ export function FooterIndicators() {
                   src={preview.image}
                   alt=""
                   className="absolute inset-0 h-full w-full object-cover"
-                  style={{ objectPosition: "center 60%", filter: "brightness(0.7)" }}
+                  style={{
+                    objectPosition: "center 60%",
+                    filter: "brightness(0.7)",
+                  }}
                 />
               )}
               <p

@@ -128,7 +128,11 @@ export function Navbar() {
       className="fixed top-0 right-0 left-0 z-[1000]"
       style={navStyle}
     >
-      <div className="flex h-16 items-center px-6">
+      <style>{`
+        .cta-pill .cta-bg { filter: blur(2px); transition: filter 300ms ease; }
+        .cta-pill:hover .cta-bg { filter: blur(0px); }
+      `}</style>
+      <div className="flex h-16 items-center justify-between px-6">
         <a
           href="#"
           className="flex items-center transition-opacity hover:opacity-70"
@@ -150,6 +154,32 @@ export function Navbar() {
             <path d="M 24.112 7.015 C 24.112 6.863 24.235 6.739 24.388 6.739 L 25.479 6.739 C 25.632 6.739 25.756 6.863 25.756 7.015 L 25.756 8.91 C 26.226 7.55 27.272 6.72 28.784 6.631 C 28.936 6.622 29.06 6.747 29.06 6.899 L 29.06 8.028 C 29.06 8.19 28.921 8.315 28.758 8.305 C 28.683 8.3 28.608 8.297 28.529 8.297 C 26.852 8.297 25.772 9.341 25.772 11.446 L 25.772 15.744 C 25.772 15.897 25.648 16.02 25.495 16.02 L 24.388 16.02 C 24.235 16.02 24.112 15.897 24.112 15.744 Z" />
             <path d="M 15.964 16.02 C 15.811 16.02 15.688 15.897 15.688 15.744 L 15.688 4.695 C 15.688 4.542 15.811 4.419 15.964 4.419 L 18.909 4.419 C 21.051 4.419 22.48 5.562 22.48 7.402 C 22.48 8.827 21.649 9.673 20.503 10.004 C 21.782 10.352 22.729 11.363 22.729 12.938 C 22.729 14.893 21.234 16.02 19.009 16.02 Z M 17.348 14.579 L 18.976 14.579 C 20.055 14.579 21.051 13.982 21.051 12.639 C 21.051 11.33 20.055 10.733 18.976 10.733 L 17.348 10.733 Z M 17.348 9.341 L 18.876 9.341 C 19.872 9.341 20.819 8.894 20.819 7.617 C 20.819 6.341 19.872 5.86 18.876 5.86 L 17.348 5.86 Z" />
           </svg>
+        </a>
+
+        <a
+          href="mailto:abhinav@breethrhq.com"
+          target="_blank"
+          rel="noopener"
+          className="cta-pill relative flex h-8 w-20 items-center justify-center font-sans"
+          style={{
+            borderRadius: "1000px",
+            fontSize: "13px",
+          }}
+        >
+          <span
+            aria-hidden
+            className="cta-bg absolute inset-0"
+            style={{
+              backgroundColor: "rgb(255, 255, 255)",
+              borderRadius: "1000px",
+            }}
+          />
+          <span
+            className="relative pt-0.5 tracking-tighter"
+            style={{ color: TEAL }}
+          >
+            Let&apos;s chat
+          </span>
         </a>
       </div>
     </nav>
