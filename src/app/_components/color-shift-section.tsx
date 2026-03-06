@@ -222,7 +222,7 @@ export function ColorShiftSection() {
             className="pointer-events-none absolute inset-0 h-full w-full object-cover"
             style={{
               objectPosition: "center 35%",
-              filter: "saturate(1.08) brightness(0.65)",
+              filter: "saturate(1.08) blur(0.1px) brightness(0.69)",
               transform: `translateY(${20 * (1 - footerT)}px) scale(${1 + 0.03 * (1 - footerT)})`,
               willChange: isAnimating ? "transform" : undefined,
             }}

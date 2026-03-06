@@ -1,6 +1,7 @@
 "use client";
 
 import { useCallback, useEffect, useRef, useState } from "react";
+import { GRAIN_START_FRAME } from "./scroll-video";
 
 // ── tiny fade util ────────────────────────────────────────────────
 function fadeTo(
@@ -36,6 +37,7 @@ export function AudioManager() {
   const fadeIdRef = useRef<ReturnType<typeof setInterval> | null>(null);
 
   const [muted, setMuted] = useState(false);
+  const [showButton, setShowButton] = useState(true);
 
   // ── helpers ───────────────────────────────────────────────────────
   const cancelFade = () => {
@@ -64,14 +66,20 @@ export function AudioManager() {
     const startWind = () => {
       if (startedRef.current) return;
       startedRef.current = true;
-      void wind.play().then(() => fadeWind(0.18)).catch(() => null);
+      void wind
+        .play()
+        .then(() => fadeWind(0.18))
+        .catch(() => null);
     };
 
     // ── hover-in / hover-out handlers (desktop) ──────────────────────
     const onMouseEnter = () => {
       if (!startedRef.current) {
         startedRef.current = true;
-        void wind.play().then(() => fadeWind(0.25)).catch(() => null);
+        void wind
+          .play()
+          .then(() => fadeWind(0.25))
+          .catch(() => null);
         return;
       }
       hoverVolumeRef.current = 0.25;
@@ -95,8 +103,7 @@ export function AudioManager() {
             startedRef.current &&
             !mutedRef.current
           ) {
-            const id =
-              (entry.target as HTMLElement).dataset.section ?? "";
+            const id = (entry.target as HTMLElement).dataset.section ?? "";
             if (id !== lastSectionRef.current) {
               lastSectionRef.current = id;
               const w = whooshRef.current;
@@ -130,6 +137,24 @@ export function AudioManager() {
     };
   }, [fadeWind]);
 
+  // ── hide button once past grain-start in scroll-video (~51%) ──────
+  useEffect(() => {
+    const GRAIN_THRESHOLD = GRAIN_START_FRAME / 150; // GRAIN_START_FRAME / TOTAL_FRAMES
+    const handleScroll = () => {
+      const container = document.querySelector<HTMLElement>(
+        "[data-scroll-video]",
+      );
+      if (!container) return;
+      const scrollable = container.offsetHeight - window.innerHeight;
+      if (scrollable <= 0) return;
+      const progress = -container.getBoundingClientRect().top / scrollable;
+      setShowButton(progress < GRAIN_THRESHOLD);
+    };
+    window.addEventListener("scroll", handleScroll, { passive: true });
+    handleScroll();
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, []);
+
   // ── mute toggle ───────────────────────────────────────────────────
   const toggleMute = () => {
     const w = windRef.current;
@@ -158,8 +183,14 @@ export function AudioManager() {
     <button
       onClick={toggleMute}
       aria-label={muted ? "Unmute" : "Mute"}
-      className="group fixed bottom-6 right-6 z-50 flex h-9 w-9 items-center justify-center rounded-full border border-[#546a71]/20 bg-white/70 shadow-sm backdrop-blur-md transition-all duration-200 hover:bg-white/90 hover:shadow-md"
-      style={{ WebkitBackdropFilter: "blur(8px)" }}
+      className="group fixed right-6 bottom-6 z-50 flex h-9 w-9 items-center justify-center rounded-full border border-[#546a71]/20 bg-white/70 shadow-sm backdrop-blur-md transition-all duration-200 hover:bg-white/90 hover:shadow-md"
+      style={{
+        WebkitBackdropFilter: "blur(8px)",
+        opacity: showButton ? 1 : 0,
+        pointerEvents: showButton ? "auto" : "none",
+        transition:
+          "opacity 300ms ease, background-color 200ms, box-shadow 200ms",
+      }}
     >
       {muted ? (
         /* Speaker muted icon */

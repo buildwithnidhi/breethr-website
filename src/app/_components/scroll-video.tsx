@@ -9,7 +9,7 @@ const TOTAL_FRAMES = 150;
 
 // ── Grain config ───────────────────────────────────────────────────
 /** First frame (1-based) where the grain overlay activates. */
-const GRAIN_START_FRAME = 77;
+export const GRAIN_START_FRAME = 77;
 /** Opacity of the grain layer (0 = invisible, 1 = full noise). */
 const GRAIN_OPACITY = 0.018;
 /** Scale of the noise texture — higher = coarser grain. */
@@ -53,20 +53,20 @@ const STATS_LABELS = [
 ] as const;
 
 // Values for each environment stage: Outdoor → Semi-outdoor → Indoor
-const ENV_OUTDOOR   = [21, 3.4, 67, 23, 1439];
-const ENV_SEMI      = [21, 93, 67, 46, 1529];
-const ENV_INDOOR    = [17, 158, 72, 102, 1688];
+const ENV_OUTDOOR = [21, 3.4, 67, 23, 1439];
+const ENV_SEMI = [21, 93, 67, 46, 1529];
+const ENV_INDOOR = [17, 158, 72, 102, 1688];
 
 function lerpEnvValues(progress: number): number[] {
   // Outdoor 0–0.30, transition 0.30–0.45, Semi 0.45–0.60, transition 0.60–0.75, Indoor 0.75+
-  if (progress <= 0.30) return ENV_OUTDOOR;
+  if (progress <= 0.3) return ENV_OUTDOOR;
   if (progress <= 0.45) {
-    const t = easeOutCubic((progress - 0.30) / 0.15);
+    const t = easeOutCubic((progress - 0.3) / 0.15);
     return ENV_OUTDOOR.map((v, i) => v + (ENV_SEMI[i]! - v) * t);
   }
-  if (progress <= 0.60) return ENV_SEMI;
+  if (progress <= 0.6) return ENV_SEMI;
   if (progress <= 0.75) {
-    const t = easeOutCubic((progress - 0.60) / 0.15);
+    const t = easeOutCubic((progress - 0.6) / 0.15);
     return ENV_SEMI.map((v, i) => v + (ENV_INDOOR[i]! - v) * t);
   }
   return ENV_INDOOR;
@@ -208,8 +208,8 @@ export function ScrollVideo() {
   const [loaded, setLoaded] = useState(false);
 
   // ── Counter animation state ──
-  const [counterValues, setCounterValues] = useState<number[]>(
-    () => STATS_LABELS.map(() => 0),
+  const [counterValues, setCounterValues] = useState<number[]>(() =>
+    STATS_LABELS.map(() => 0),
   );
   const counterRafRef = useRef<number>(0);
   const counterStartRef = useRef<number | null>(null);
@@ -400,16 +400,14 @@ export function ScrollVideo() {
     "Air isn\u2019t neutral. When it stagnates, mold and",
     "dust multiply, clouding your mind, draining",
     "your body, and affecting your health.",
-  ].map((_line, i) =>
-    getScrollLineStyle(progress, 0.6, 0.66, 1.1, 1.2, i, 3),
-  );
+  ].map((_line, i) => getScrollLineStyle(progress, 0.6, 0.66, 1.1, 1.2, i, 3));
 
   // Text 2 visible at all if any line has opacity > 0
   const text2Visible = text2Lines.some((s) => (s.opacity as number) > 0);
   const text3Visible = text3Lines.some((s) => (s.opacity as number) > 0);
 
   return (
-    <div ref={containerRef} className="relative" style={{ height: "800vh" }}>
+    <div ref={containerRef} data-scroll-video className="relative" style={{ height: "800vh" }}>
       {/* Keyframe injected inline to avoid Turbopack/Windows nul-device CSS bug */}
       <style>{`@keyframes heroFadeIn{from{opacity:0}to{opacity:1}}`}</style>
       {/* Sticky viewport */}
@@ -590,7 +588,7 @@ export function ScrollVideo() {
           style={{ opacity: scrollIndicatorOpacity }}
         >
           <p
-            className="font-mono uppercase text-white"
+            className="font-mono text-white uppercase"
             style={{ fontSize: "14px", letterSpacing: "-0.14px" }}
           >
             SCROLL
