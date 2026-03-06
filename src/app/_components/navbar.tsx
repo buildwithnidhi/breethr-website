@@ -49,7 +49,8 @@ export function Navbar() {
         }
 
         // Determine direction
-        const newDir = delta > 0 ? "down" : delta < 0 ? "up" : directionRef.current;
+        const newDir =
+          delta > 0 ? "down" : delta < 0 ? "up" : directionRef.current;
 
         // Reset accumulator on direction change
         if (newDir !== directionRef.current) {
@@ -88,7 +89,6 @@ export function Navbar() {
     setIsOpen((v) => !v);
   }, []);
 
-
   // ── Navbar slide animation (translateY -100% to hide) ───────────
   const navTransform: React.CSSProperties = {
     transform: visible ? "translateY(0)" : "translateY(-100%)",
@@ -111,7 +111,7 @@ export function Navbar() {
           Desktop nav  (md and above)
           ════════════════════════════════════════════════════════════ */}
       <nav
-        className="fixed left-0 right-0 top-0 z-[1000] hidden md:block"
+        className="fixed top-0 right-0 left-0 z-[1000] hidden md:block"
         style={{ ...navTransform, boxShadow: shadow }}
       >
         <div
@@ -171,10 +171,9 @@ export function Navbar() {
               href="mailto:abhinav@breethrhq.com"
               target="_blank"
               rel="noopener"
-              className="cta-pill relative flex items-center justify-center font-sans"
+              className="cta-pill relative flex h-8 w-20 items-center justify-center font-sans"
               style={{
                 borderRadius: "1000px",
-                padding: "10px 14px",
                 fontSize: "13px",
               }}
             >
@@ -187,7 +186,7 @@ export function Navbar() {
                 }}
               />
               <span
-                className="relative"
+                className="relative pt-0.5 tracking-tighter"
                 style={{ color: TEAL }}
               >
                 Let&apos;s chat
@@ -201,7 +200,7 @@ export function Navbar() {
           Mobile nav  (below md)
           ════════════════════════════════════════════════════════════ */}
       <div
-        className="fixed left-0 right-0 top-0 z-[1000] overflow-hidden md:hidden"
+        className="fixed top-0 right-0 left-0 z-[1000] overflow-hidden md:hidden"
         style={{
           ...navTransform,
           maxHeight: isOpen ? "400px" : "56px",
@@ -246,9 +245,10 @@ export function Navbar() {
           >
             {/* Hamburger */}
             <span
-              className="absolute left-0 right-0"
+              className="absolute right-0 left-0"
               style={{
-                transition: "opacity 200ms ease, transform 300ms cubic-bezier(0.2,0,0,1)",
+                transition:
+                  "opacity 200ms ease, transform 300ms cubic-bezier(0.2,0,0,1)",
                 opacity: isOpen ? 0 : 1,
               }}
             >
@@ -259,17 +259,42 @@ export function Navbar() {
                 fill="none"
                 xmlns="http://www.w3.org/2000/svg"
               >
-                <line x1="0" y1="1"  x2="22" y2="1"  stroke={TEAL} strokeWidth="1.5" strokeLinecap="round" />
-                <line x1="0" y1="7"  x2="22" y2="7"  stroke={TEAL} strokeWidth="1.5" strokeLinecap="round" />
-                <line x1="0" y1="13" x2="22" y2="13" stroke={TEAL} strokeWidth="1.5" strokeLinecap="round" />
+                <line
+                  x1="0"
+                  y1="1"
+                  x2="22"
+                  y2="1"
+                  stroke={TEAL}
+                  strokeWidth="1.5"
+                  strokeLinecap="round"
+                />
+                <line
+                  x1="0"
+                  y1="7"
+                  x2="22"
+                  y2="7"
+                  stroke={TEAL}
+                  strokeWidth="1.5"
+                  strokeLinecap="round"
+                />
+                <line
+                  x1="0"
+                  y1="13"
+                  x2="22"
+                  y2="13"
+                  stroke={TEAL}
+                  strokeWidth="1.5"
+                  strokeLinecap="round"
+                />
               </svg>
             </span>
 
             {/* X icon */}
             <span
-              className="absolute left-0 right-0"
+              className="absolute right-0 left-0"
               style={{
-                transition: "opacity 200ms ease, transform 300ms cubic-bezier(0.2,0,0,1)",
+                transition:
+                  "opacity 200ms ease, transform 300ms cubic-bezier(0.2,0,0,1)",
                 opacity: isOpen ? 1 : 0,
                 transform: isOpen ? "rotate(0deg)" : "rotate(-45deg)",
               }}
@@ -281,8 +306,24 @@ export function Navbar() {
                 fill="none"
                 xmlns="http://www.w3.org/2000/svg"
               >
-                <line x1="2"  y1="2"  x2="20" y2="20" stroke={TEAL} strokeWidth="1.5" strokeLinecap="round" />
-                <line x1="20" y1="2"  x2="2"  y2="20" stroke={TEAL} strokeWidth="1.5" strokeLinecap="round" />
+                <line
+                  x1="2"
+                  y1="2"
+                  x2="20"
+                  y2="20"
+                  stroke={TEAL}
+                  strokeWidth="1.5"
+                  strokeLinecap="round"
+                />
+                <line
+                  x1="20"
+                  y1="2"
+                  x2="2"
+                  y2="20"
+                  stroke={TEAL}
+                  strokeWidth="1.5"
+                  strokeLinecap="round"
+                />
               </svg>
             </span>
           </button>
@@ -293,7 +334,8 @@ export function Navbar() {
           style={{
             opacity: isOpen ? 1 : 0,
             transform: isOpen ? "translateY(0)" : "translateY(-8px)",
-            transition: "opacity 300ms ease 80ms, transform 350ms cubic-bezier(0.2,0,0,1) 60ms",
+            transition:
+              "opacity 300ms ease 80ms, transform 350ms cubic-bezier(0.2,0,0,1) 60ms",
             pointerEvents: isOpen ? "auto" : "none",
           }}
         >
